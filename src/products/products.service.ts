@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
+import { Product } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 // import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
+	constructor(private prisma: PrismaService) {}
+
 	create(createProductDto: CreateProductDto) {
 		return {
 			id: Math.floor(Math.random() * 1000),
@@ -11,8 +15,8 @@ export class ProductsService {
 		};
 	}
 
-	findAll() {
-		return `This action returns all products`;
+	async findAll(): Promise<Product[]> {
+		return await this.prisma.product.findMany();
 	}
 
 	findOne(id: number) {
